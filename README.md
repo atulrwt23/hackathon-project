@@ -1,3 +1,4 @@
+# hackathon-project
 # nl2sql
 
 A natural-language-to-SQL sidecar plugin for PostgreSQL. Drop it next to any service; the host calls `/ingest` once with the target DB and business glossary, then calls `/query` with NL questions. The plugin retrieves relevant schema + glossary chunks, asks Claude to generate SQL, validates it (read-only, parseable, row-capped), executes it against a read-only role, and returns rows.
@@ -56,5 +57,3 @@ curl -X POST http://localhost:8080/query \
 ```
 
 See `src/nl2sql/` for module-by-module breakdown. Authorization is hybrid: the host owns authentication; the plugin owns data-level authorization via the `principal` field on every query.
-# hackathon-project
-# hackathon-project
