@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: nl2sql
+      POSTGRES_PASSWORD: nl2sql
+      POSTGRES_DB: nl2sql
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nl2sql"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  nl2sql:
+    build: .
+    environment:
+      NL2SQL_METADATA_DSN: postgresql://nl2sql:nl2sql@postgres:5432/nl2sql
+      NL2SQL_ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      NL2SQL_VOYAGE_API_KEY: ${VOYAGE_API_KEY}
+      NL2SQL_LLM_MODEL: claude-sonnet-4-6
+      NL2SQL_EMBED_MODEL: voyage-3
+      NL2SQL_MAX_ROWS: "1000"
+      NL2SQL_STATEMENT_TIMEOUT_MS: "5000"
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:

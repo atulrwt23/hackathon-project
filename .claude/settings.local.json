@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(.venv/bin/pip install *)",
+      "Bash(PYTHONPATH=src .venv/bin/pytest tests/ -v)"
+    ]
+  }
+}
